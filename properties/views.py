@@ -43,6 +43,19 @@ def normalize_auction_date(properties):
 
 def home(request):
     try:
+        # Check if Property model exists in database
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT name FROM sqlite_master 
+                WHERE type='table' AND name='properties_property'
+            """)
+            table_exists = cursor.fetchone()
+        
+        if not table_exists:
+            # Database table doesn't exist yet, show fallback
+            return render(request, 'properties/fallback.html')
+        
         user = request.user
         properties = Property.objects.all().order_by('-created_at')
         normalize_auction_date(properties)
@@ -63,6 +76,19 @@ def contact(request):
 
 def properties_list(request):
     try:
+        # Check if Property model exists in database
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT name FROM sqlite_master 
+                WHERE type='table' AND name='properties_property'
+            """)
+            table_exists = cursor.fetchone()
+        
+        if not table_exists:
+            # Database table doesn't exist yet, show fallback
+            return render(request, 'properties/fallback.html')
+        
         properties = Property.objects.all().order_by('-created_at')
         normalize_auction_date(properties)
         context = {
