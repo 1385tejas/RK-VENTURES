@@ -1,1 +1,1 @@
-web: gunicorn rkventures_site.wsgi --log-file -
+web: gunicorn rkventures_site.wsgi:application --bind 0.0.0.0:$PORT

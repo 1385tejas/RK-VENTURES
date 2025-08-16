@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gtvc wdeh fpwd ngem'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'gtvc wdeh fpwd ngem')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']  # Configure this properly for production
+
+# Security settings for production
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'False') == 'True'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -40,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'properties',
-    'channels',
     'notifications',
 ]
 
@@ -73,19 +77,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'rkventures_site.wsgi.application'
-ASGI_APPLICATION = 'rkventures_site.asgi.application'
-# Use in-memory channel layer for development (no Redis required)
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -132,8 +127,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Enable WhiteNoise's GZip compression
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Enable WhiteNoise for static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
