@@ -19,8 +19,10 @@ from django.urls import path, include
 from properties import views as property_views
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
+    path('health/', views.health_check, name='health_check'),
     path('', property_views.home, name='home'),
     path('about/', property_views.about, name='about'),
     path('contact/', property_views.contact, name='contact'),
