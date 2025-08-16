@@ -42,14 +42,18 @@ def normalize_auction_date(properties):
                 ed['auction_date'] = ed['auction date']
 
 def home(request):
-    user = request.user
-    properties = Property.objects.all().order_by('-created_at')
-    normalize_auction_date(properties)
-    context = {
-        'properties': properties,
-        'user': user,
-    }
-    return render(request, 'properties/home.html', context)
+    try:
+        user = request.user
+        properties = Property.objects.all().order_by('-created_at')
+        normalize_auction_date(properties)
+        context = {
+            'properties': properties,
+            'user': user,
+        }
+        return render(request, 'properties/home.html', context)
+    except Exception as e:
+        # Fallback if there's an error - use fallback template
+        return render(request, 'properties/fallback.html')
 
 def about(request):
     return render(request, 'properties/about.html')
@@ -58,13 +62,22 @@ def contact(request):
     return render(request, 'properties/contact.html')
 
 def properties_list(request):
-    properties = Property.objects.all().order_by('-created_at')
-    normalize_auction_date(properties)
-    context = {
-        'properties': properties,
-        'user': request.user,
-    }
-    return render(request, 'properties/properties_list.html', context)
+    try:
+        properties = Property.objects.all().order_by('-created_at')
+        normalize_auction_date(properties)
+        context = {
+            'properties': properties,
+            'user': request.user,
+        }
+        return render(request, 'properties/properties_list.html', context)
+    except Exception as e:
+        # Fallback if there's an error
+        context = {
+            'properties': [],
+            'user': request.user,
+            'error_message': 'Loading properties...'
+        }
+        return render(request, 'properties/properties_list.html', context)
 
 def property_detail(request, property_id):
     property_obj = get_object_or_404(Property, id=property_id)
