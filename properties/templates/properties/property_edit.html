@@ -1,0 +1,43 @@
+{% extends 'properties/base.html' %}
+{% block title %}Edit Property - RK Ventures{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Edit Property</h1>
+        {% if message %}
+            <div class="msg">{{ message }}</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for key, value in property.items %}
+                {% if key != 'id' and key != 'Image' %}
+                    <label for="{{ key }}">{{ key|capfirst }}</label>
+                    <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}">
+                {% endif %}
+            {% endfor %}
+            {% for key, value in property.extra_data.items %}
+                <label for="{{ key }}">{{ key|capfirst }}</label>
+                <input type="text" id="{{ key }}" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <label for="Images">Add Images</label>
+            <input type="file" id="Images" name="Images" accept="image/*" multiple>
+            <div class="img-gallery">
+                {% if property.main_image %}
+                    <img src="{{ property.main_image.url }}" alt="Property Image">
+                {% endif %}
+                {% if property.extra_images %}
+                    {% for img in property.extra_images %}
+                        <img src="{{ img }}" alt="Property Image">
+                    {% endfor %}
+                {% endif %}
+                {% if not property.main_image and not property.extra_images %}
+                    <div class="noimg">No image available</div>
+                {% endif %}
+            </div>
+            <button type="submit">Save</button>
+        </form>
+        <a href="/properties/{{ property.id }}/" class="btn" style="margin-top:2rem;display:inline-block;">Back to Details</a>
+    </div>
+{% endblock %}
+{% block extra_scripts %}
+{{ block.super }}
+{% endblock %} 

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - RK Ventures</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: #f4f6f8; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        .register-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(44,62,80,0.10);
+            padding: 2.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 { color: #2d3e50; margin-bottom: 1.5rem; }
+        form { width: 100%; display: flex; flex-direction: column; gap: 1rem; }
+        label { font-weight: 500; color: #2d3e50; margin-bottom: 0.2rem; }
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%; padding: 0.7rem 1rem; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+        button[type="submit"] {
+            background: #2d3e50; color: #fff; border: none; border-radius: 6px; padding: 0.8rem 0; font-size: 1.1rem; font-weight: bold; margin-top: 0.5rem; cursor: pointer; transition: background 0.2s; }
+        button[type="submit"]:hover { background: #1e2a38; }
+        .switch-link { margin-top: 1.2rem; color: #888; font-size: 0.98rem; }
+        .switch-link a { color: #2d3e50; text-decoration: none; font-weight: bold; }
+        .switch-link a:hover { text-decoration: underline; }
+        .messages { margin-bottom: 1rem; color: #c0392b; font-size: 1rem; }
+        @media (max-width: 600px) { .register-container { max-width: 98vw; padding: 1.2rem; } }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create Your Account</h2>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}{{ message }}<br>{% endfor %}
+            </div>
+        {% endif %}
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <label for="name">Full Name</label>
+            <input type="text" name="name" id="name" placeholder="Your Name" required>
+            <label for="phone">Phone Number</label>
+            <input type="text" name="phone" id="phone" placeholder="e.g. 9876543210" required>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="you@email.com" required>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Choose a username" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <label for="password2">Confirm Password</label>
+            <input type="password" name="password2" id="password2" placeholder="Confirm Password" required>
+            <label for="user_type">I am a</label>
+            <select name="user_type" id="user_type" required>
+                <option value="buyer">Buyer</option>
+                <option value="broker">Broker</option>
+                <option value="investor">Investor</option>
+            </select>
+            <label for="interested_places">Interested Places</label>
+            <input type="text" name="interested_places" id="interested_places" placeholder="e.g. Mumbai, Pune, Delhi" required>
+            <label for="budget">Budget Range</label>
+            <select name="budget" id="budget" required>
+                <option value="">Select Budget Range</option>
+                <option value="Under 25L">Under 25L</option>
+                <option value="25L-50L">25L - 50L</option>
+                <option value="50L-1Cr">50L - 1Cr</option>
+                <option value="1Cr-2Cr">1Cr - 2Cr</option>
+                <option value="2Cr-5Cr">2Cr - 5Cr</option>
+                <option value="5Cr-10Cr">5Cr - 10Cr</option>
+                <option value="Above 10Cr">Above 10Cr</option>
+            </select>
+            <button type="submit">Register</button>
+        </form>
+        <div class="switch-link">Already have an account? <a href="{% url 'login' %}">Login here</a>.</div>
+    </div>
+</body>
+</html> 

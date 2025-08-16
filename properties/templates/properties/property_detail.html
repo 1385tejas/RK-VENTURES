@@ -1,0 +1,89 @@
+{% extends 'properties/base.html' %}
+{% block title %}Property Details - RK Ventures{% endblock %}
+{% block content %}
+<div class="container" style="max-width:700px;margin:3rem auto;padding:2rem;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.07);">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+        <h1 style="color:#2d3e50;margin-bottom:0.5rem;">{{ property.title|default:'Property Details' }}</h1>
+        {% if user.is_authenticated and user.is_staff %}
+        <div style="display:flex;gap:0.7rem;">
+            <a href="/properties/{{ property.id }}/edit/" class="btn">Edit</a>
+            <a href="/properties/{{ property.id }}/delete/" class="btn" style="background:#c0392b;" onclick="return confirm('Are you sure you want to delete this property?');" title="Delete Property" aria-label="Delete Property">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="img-gallery" style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+        {% if property.main_image %}
+            <img src="{{ property.main_image.url }}" alt="Property Image" class="zoomable-img" style="max-width:180px;height:120px;object-fit:cover;border-radius:8px;border:1px solid #ccc;cursor:pointer;">
+        {% endif %}
+        {% for img in property.extra_images %}
+            <img src="{{ img }}" alt="Property Image" class="zoomable-img" style="max-width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ccc;cursor:pointer;">
+        {% endfor %}
+        {% if not property.main_image and not property.extra_images %}
+            <div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;background:#eee;border-radius:8px;color:#888;font-size:1.1rem;">No image available</div>
+        {% endif %}
+    </div>
+    <!-- Modal for image zoom -->
+    <div id="imgModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;">
+        <span id="closeModal" style="position:absolute;top:30px;right:40px;font-size:3rem;color:#fff;cursor:pointer;font-weight:bold;">&times;</span>
+        <span id="prevImg" style="position:absolute;left:30px;top:50%;transform:translateY(-50%);font-size:3rem;color:#fff;cursor:pointer;font-weight:bold;user-select:none;">&#10094;</span>
+        <span id="nextImg" style="position:absolute;right:30px;top:50%;transform:translateY(-50%);font-size:3rem;color:#fff;cursor:pointer;font-weight:bold;user-select:none;">&#10095;</span>
+        <img id="modalImg" src="" alt="Zoomed Image" style="max-width:90vw;max-height:90vh;box-shadow:0 4px 32px rgba(0,0,0,0.5);border-radius:12px;">
+    </div>
+    <script>
+    // Gather all image URLs
+    var imgUrls = [];
+    {% if property.main_image %}imgUrls.push("{{ property.main_image.url }}");{% endif %}
+    {% for img in property.extra_images %}imgUrls.push("{{ img }}");{% endfor %}
+    var currentIdx = 0;
+    document.querySelectorAll('.zoomable-img').forEach(function(img, idx) {
+        img.addEventListener('click', function(e) {
+            currentIdx = idx;
+            showModal(currentIdx);
+        });
+    });
+    function showModal(idx) {
+        document.getElementById('imgModal').style.display = 'flex';
+        document.getElementById('modalImg').src = imgUrls[idx];
+    }
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('imgModal').style.display = 'none';
+        document.getElementById('modalImg').src = '';
+    };
+    document.getElementById('imgModal').onclick = function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+            document.getElementById('modalImg').src = '';
+        }
+    };
+    document.getElementById('prevImg').onclick = function(e) {
+        e.stopPropagation();
+        currentIdx = (currentIdx - 1 + imgUrls.length) % imgUrls.length;
+        showModal(currentIdx);
+    };
+    document.getElementById('nextImg').onclick = function(e) {
+        e.stopPropagation();
+        currentIdx = (currentIdx + 1) % imgUrls.length;
+        showModal(currentIdx);
+    };
+    </script>
+    <div class="property-info" style="margin-top:1.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem 2.5rem;">
+            <div><span class="property-label">Price:</span> <span class="property-value">{{ property.price|default:'N/A' }}</span></div>
+            <div><span class="property-label">Location:</span> <span class="property-value">{{ property.location|default:'N/A' }}</span></div>
+            <div><span class="property-label">Area:</span> <span class="property-value">{% if property.extra_data.area %}{{ property.extra_data.area }}{% elif property.extra_data.Area %}{{ property.extra_data.Area }}{% else %}N/A{% endif %}</span></div>
+            <div><span class="property-label">Type:</span> <span class="property-value">{% if property.extra_data.type %}{{ property.extra_data.type|default_if_none:'N/A' }}{% elif property.extra_data.Type %}{{ property.extra_data.Type|default_if_none:'N/A' }}{% else %}N/A{% endif %}</span></div>
+            <div><span class="property-label">Auction Date:</span> <span class="property-value">{{ property.extra_data.auction_date|default:'N/A' }}</span></div>
+            <div><span class="property-label">Description:</span> <span class="property-value">{{ property.description|default:'N/A' }}</span></div>
+            {% for key, value in property.extra_data.items %}
+                {% if key != 'area' and key != 'Area' and key != 'type' and key != 'Type' and key != 'auction_date' and key != 'Auction_date' and key != 'auction date' %}
+                    <div><span class="property-label">{{ key|capfirst }}:</span> <span class="property-value">{{ value|default:'N/A' }}</span></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <a href="/properties/" class="btn" style="margin-top:2rem;">Back to Properties</a>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+{{ block.super }}
+{% endblock %} 

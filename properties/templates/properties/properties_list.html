@@ -1,0 +1,564 @@
+{% extends 'properties/base.html' %}
+{% block title %}Properties - RK Ventures{% endblock %}
+{% block content %}
+<!-- Mobile viewport for responsiveness -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@media (max-width: 600px) {
+  .container { padding: 0 0.5rem; }
+  #filterForm {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.7rem !important;
+    padding: 1rem 0.5rem !important;
+    font-size: 1rem;
+  }
+  #filterForm label, #filterForm input, #filterForm select, #filterForm button {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 1rem !important;
+  }
+  .toggle-fav { margin-bottom: 1rem; }
+  .properties {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .property {
+    min-height: unset !important;
+    height: auto !important;
+    border-radius: 10px !important;
+  }
+  .fav-btn {
+    top: 10px !important;
+    right: 10px !important;
+    width: 38px !important;
+    height: 28px !important;
+    font-size: 0.95rem !important;
+    border-radius: 14px !important;
+    padding: 0 0.5rem !important;
+  }
+  .property-details {
+    padding: 0.8rem 0.7rem 0.8rem 0.7rem !important;
+  }
+  .property-title {
+    font-size: 1.08rem !important;
+  }
+  .property-location, .property-price, .property-details span, .property-details div {
+    font-size: 0.97rem !important;
+  }
+  .btn {
+    font-size: 1rem !important;
+    padding: 0.4rem 1rem !important;
+  }
+}
+</style>
+    <div class="container">
+        <h1>All Properties</h1>
+        <!-- Filter and Sort Bar Start -->
+        <form id="filterForm" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: flex-start; margin-bottom: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); padding: 1.5rem;">
+            <label style="font-size: 1.01rem; color: #8a1832; font-weight: 500;">Type
+                <select id="propertyType" style="min-width:120px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size: 1rem;">
+                    <option value="">All Property</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Plot">Plot</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
+            </label>
+            <label style="font-size: 1.01rem; color: #8a1832; font-weight: 500;">Bank
+                <select id="bankName" style="min-width:180px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size: 1rem;">
+                    <option value="">All Banks</option>
+                    <option value="State Bank of India">State Bank of India (SBI)</option>
+                    <option value="Punjab National Bank">Punjab National Bank (PNB)</option>
+                    <option value="Bank of Baroda">Bank of Baroda (BOB)</option>
+                    <option value="Canara Bank">Canara Bank</option>
+                    <option value="Union Bank of India">Union Bank of India</option>
+                    <option value="Bank of India">Bank of India</option>
+                    <option value="Central Bank of India">Central Bank of India</option>
+                    <option value="Indian Bank">Indian Bank</option>
+                    <option value="UCO Bank">UCO Bank</option>
+                    <option value="Punjab & Sind Bank">Punjab & Sind Bank</option>
+                    <option value="HDFC Bank">HDFC Bank</option>
+                    <option value="ICICI Bank">ICICI Bank</option>
+                    <option value="Axis Bank">Axis Bank</option>
+                    <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                    <option value="IndusInd Bank">IndusInd Bank</option>
+                    <option value="Yes Bank">Yes Bank</option>
+                    <option value="IDBI Bank">IDBI Bank</option>
+                    <option value="Housing Development Finance Corporation">HDFC Ltd</option>
+                    <option value="LIC Housing Finance">LIC Housing Finance</option>
+                    <option value="Bajaj Housing Finance">Bajaj Housing Finance</option>
+                    <option value="PNB Housing Finance">PNB Housing Finance</option>
+                    <option value="DHFL">DHFL</option>
+                    <option value="Indiabulls Housing Finance">Indiabulls Housing Finance</option>
+                    <option value="Reliance Home Finance">Reliance Home Finance</option>
+                    <option value="Tata Capital Housing Finance">Tata Capital Housing Finance</option>
+                    <option value="Aditya Birla Housing Finance">Aditya Birla Housing Finance</option>
+                    <option value="Sundaram Home Finance">Sundaram Home Finance</option>
+                    <option value="Repco Home Finance">Repco Home Finance</option>
+                    <option value="Aadhar Housing Finance">Aadhar Housing Finance</option>
+                    <option value="GIC Housing Finance">GIC Housing Finance</option>
+                    <option value="Can Fin Homes">Can Fin Homes</option>
+                    <option value="GRUH Finance">GRUH Finance</option>
+                    <option value="Home First Finance">Home First Finance</option>
+                    <option value="Aptus Value Housing Finance">Aptus Value Housing Finance</option>
+                    <option value="Aavas Financiers">Aavas Financiers</option>
+                    <option value="Home Credit India">Home Credit India</option>
+                    <option value="Cholamandalam Investment">Cholamandalam Investment</option>
+                    <option value="Shriram Housing Finance">Shriram Housing Finance</option>
+                    <option value="Edelweiss Housing Finance">Edelweiss Housing Finance</option>
+                    <option value="Piramal Capital">Piramal Capital</option>
+                    <option value="IIFL Home Finance">IIFL Home Finance</option>
+                    <option value="JM Financial">JM Financial</option>
+                    <option value="Motilal Oswal">Motilal Oswal</option>
+                    <option value="Kotak Mahindra Prime">Kotak Mahindra Prime</option>
+                    <option value="Tata Motors Finance">Tata Motors Finance</option>
+                    <option value="Mahindra Finance">Mahindra Finance</option>
+                    <option value="Bajaj Finance">Bajaj Finance</option>
+                    <option value="HDB Financial Services">HDB Financial Services</option>
+                    <option value="ICICI Home Finance">ICICI Home Finance</option>
+                    <option value="Axis Finance">Axis Finance</option>
+                    <option value="SBI Cards">SBI Cards</option>
+                    <option value="Other">Other</option>
+                </select>
+            </label>
+            <label style="font-size: 1.01rem; color: #8a1832; font-weight: 500;">State
+                <select id="state" style="min-width:150px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size: 1rem;">
+                    <option value="">All States</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                    <option value="Ladakh">Ladakh</option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                    <option value="Puducherry">Puducherry</option>
+                </select>
+            </label>
+            <label style="font-size: 1.01rem; color: #8a1832; font-weight: 500;">District
+                <select id="district" style="min-width:140px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size: 1rem;">
+                    <option value="">Select state first</option>
+                </select>
+            </label>
+            <input type="number" id="bathroom" min="0" placeholder="Bathrooms" style="width:100px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size:1rem;">
+            <input type="number" id="areaMin" min="0" placeholder="Min Area" style="width:110px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size:1rem;">
+            <input type="number" id="areaMax" min="0" placeholder="Max Area" style="width:110px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size:1rem;">
+            <input type="number" id="priceMin" min="0" placeholder="Min Price" style="width:120px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size:1rem;">
+            <input type="number" id="priceMax" min="0" placeholder="Max Price" style="width:120px; padding: 0.5rem 0.7rem; border-radius: 6px; border: 1.5px solid #ccc; font-size:1rem;">
+            <button type="submit" class="btn" style="background: #8a1832; color: #fff; font-weight: bold; border-radius: 6px;">Apply Filter</button>
+            <button type="button" id="resetFilter" class="btn" style="background:#888; color: #fff; font-weight: bold; border-radius: 6px;">Reset</button>
+            <label for="sortBy" style="font-size: 1.08rem; font-weight: 500; color: #222; margin-left: 1.5rem;">Sort By</label>
+            <select id="sortBy" style="padding: 0.5rem 1.1rem; border-radius: 6px; border: 1.5px solid #ccc; font-size: 1.08rem; min-width:170px;">
+                <option value="">All</option>
+                <option value="price_desc">Price: Low to High</option>
+                <option value="price_asc">Price: High to Low</option>
+                <option value="auction_date_asc">Auction Date: Oldest First</option>
+                <option value="auction_date_desc">Auction Date: Newest First</option>
+            </select>
+        </form>
+        <!-- Filter and Sort Bar End -->
+        <div class="toggle-fav" style="margin-bottom:1.5rem;">
+            <button id="toggleFavBtn" class="btn">View Favourites</button>
+        </div>
+        <div class="properties" id="property-listings" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem;min-height:440px;">
+                {% for property in properties %}
+                <div class="property" style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(44,62,80,0.10);transition:box-shadow 0.2s;min-height:420px;height:420px;display:flex;flex-direction:column;justify-content:flex-start;position:relative;">
+                    <!-- Favorite Button -->
+                    <button class="fav-btn" onclick="toggleFavourite({{ property.id }})" style="position:absolute;top:16px;right:16px;z-index:2;display:flex;align-items:center;justify-content:center;width:50px;height:32px;background:#fff;border-radius:20px;box-shadow:0 2px 8px rgba(44,62,80,0.15);border:1px solid #ddd;cursor:pointer;transition:all 0.18s;font-size:0.85rem;font-weight:bold;color:#e74c3c;">
+                        <span id="fav-text-{{ property.id }}">Fav</span>
+                    </button>
+                    {% if property.main_image %}
+                        <img src="{{ property.main_image.url }}" alt="Property Image" style="width:100%;height:200px;object-fit:cover;border-top-left-radius:14px;border-top-right-radius:14px;">
+                    {% else %}
+                        <div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;background:#eee;color:#888;font-size:1.1rem;">No image available</div>
+                    {% endif %}
+                    <div class="property-details" style="padding:1.2rem 1.3rem 1.1rem 1.3rem;flex:1;display:flex;flex-direction:column;justify-content:flex-start;">
+                        <span class="property-id" style="display:none;">{{ property.id }}</span>
+                        <div data-property-id="{{ property.id }}" style="display:none;"></div>
+                        <div class="property-title" style="font-size:1.22rem;font-weight:bold;margin-bottom:0.4rem;color:#8a1832;">{{ property.title|default:'Property' }}</div>
+                        <div class="property-location" style="color:#888;font-size:0.98rem;margin-bottom:0.4rem;"><b>Location:</b> {{ property.location|default:'N/A' }}</div>
+                        <div class="property-price" style="color:#1e7e34;font-size:1.13rem;font-weight:bold;margin-bottom:0.4rem;">₹{{ property.price|default:'N/A' }}</div>
+                        <div style="display:flex;gap:1.2rem;font-size:0.99rem;margin-bottom:0.4rem;flex-wrap:wrap;">
+                            <span><b>Type:</b> {% if property.extra_data.type %}{{ property.extra_data.type|default_if_none:'N/A' }}{% elif property.extra_data.Type %}{{ property.extra_data.Type|default_if_none:'N/A' }}{% else %}N/A{% endif %}</span>
+                            {% if property.extra_data.area %}
+                            <span><b>Area:</b> {{ property.extra_data.area }}</span>
+                            {% elif property.extra_data.Area %}
+                            <span><b>Area:</b> {{ property.extra_data.Area }}</span>
+                            {% else %}
+                            <span><b>Area:</b> N/A</span>
+                            {% endif %}
+                        </div>
+                        <div style="font-size:0.99rem;margin-bottom:0.7rem;"><b>Auction Date:</b> <span class="property-auction-date">{{ property.extra_data.auction_date|default:'N/A' }}</span></div>
+                        <a href="/properties/{{ property.id }}/" class="btn" style="margin-top:auto;background:#8a1832;color:#fff;border-radius:2rem;font-weight:bold;font-size:1.08rem;padding:0.45rem 1.5rem;align-self:flex-start;box-shadow:0 2px 8px rgba(44,62,80,0.08);transition:background 0.18s;">View Details</a>
+                    </div>
+                </div>
+                {% empty %}
+                    <div>No properties found.</div>
+                {% endfor %}
+            </div>
+            <a href="/" class="btn" style="margin-top:2rem;display:inline-block;">Back to Home</a>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_scripts %}
+{{ block.super }}
+<script>
+window.toggleFavourite = function(id) {
+    console.log('Toggling favourite for property ID:', id);
+    let favs = JSON.parse(localStorage.getItem('favourites') || '[]');
+    const idx = favs.indexOf(id);
+    if (idx === -1) {
+        favs.push(id);
+        console.log('Added to favourites');
+    } else {
+        favs.splice(idx, 1);
+        console.log('Removed from favourites');
+    }
+    localStorage.setItem('favourites', JSON.stringify(favs));
+    window.updateFavButtons();
+}
+window.updateFavButtons = function() {
+    const favs = JSON.parse(localStorage.getItem('favourites') || '[]');
+    document.querySelectorAll('.property').forEach(function(card) {
+        const idEl = card.querySelector('[data-property-id]');
+        const favBtn = card.querySelector('.fav-btn');
+        const favText = card.querySelector('[id^="fav-text-"]');
+        if (!idEl || !favBtn || !favText) return;
+        const id = parseInt(idEl.getAttribute('data-property-id'));
+        if (favs.includes(id)) {
+            favBtn.style.background = '#e74c3c';
+            favBtn.style.color = '#fff';
+            favBtn.style.borderColor = '#e74c3c';
+            favText.textContent = '✓ Fav';
+        } else {
+            favBtn.style.background = '#fff';
+            favBtn.style.color = '#e74c3c';
+            favBtn.style.borderColor = '#ddd';
+            favText.textContent = 'Fav';
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    window.updateFavButtons();
+    // Dynamic district dropdown
+    var stateSelect = document.getElementById('state');
+    if (stateSelect) {
+        const stateDistricts = {
+            'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Kurnool', 'Anantapur', 'Kadapa', 'Chittoor', 'Prakasam', 'Srikakulam', 'Vizianagaram', 'East Godavari', 'West Godavari', 'Krishna'],
+            'Arunachal Pradesh': ['Itanagar', 'Naharlagun', 'Pasighat', 'Bomdila', 'Tawang', 'Ziro', 'Daporijo', 'Along', 'Tezu', 'Roing'],
+            'Assam': ['Guwahati', 'Dibrugarh', 'Jorhat', 'Silchar', 'Tinsukia', 'Tezpur', 'Nagaon', 'Barpeta', 'Goalpara', 'Dhubri', 'Kokrajhar', 'Bongaigaon', 'Karimganj', 'Hailakandi', 'Cachar'],
+            'Bihar': ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Purnia', 'Darbhanga', 'Arrah', 'Bihar Sharif', 'Katihar', 'Chapra', 'Sasaram', 'Hajipur', 'Siwan', 'Motihari', 'Bettiah'],
+            'Chhattisgarh': ['Raipur', 'Bhilai', 'Durg', 'Bilaspur', 'Korba', 'Rajnandgaon', 'Jagdalpur', 'Ambikapur', 'Dhamtari', 'Mahasamund', 'Janjgir-Champa', 'Koriya', 'Surguja', 'Bastar'],
+            'Goa': ['Panaji', 'Margao', 'Vasco da Gama', 'Mapusa', 'Ponda', 'Bicholim', 'Valpoi', 'Sanquelim', 'Curchorem', 'Quepem'],
+            'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Anand', 'Bharuch', 'Valsad', 'Navsari', 'Mehsana', 'Patan', 'Gandhinagar', 'Kheda', 'Sabarkantha'],
+            'Haryana': ['Gurgaon', 'Faridabad', 'Panipat', 'Yamunanagar', 'Rohtak', 'Hisar', 'Karnal', 'Sonipat', 'Ambala', 'Bhiwani', 'Sirsa', 'Jhajjar', 'Fatehabad', 'Rewari', 'Mahendragarh'],
+            'Himachal Pradesh': ['Shimla', 'Mandi', 'Solan', 'Kullu', 'Kangra', 'Una', 'Hamirpur', 'Bilaspur', 'Chamba', 'Kinnaur', 'Lahaul and Spiti', 'Sirmaur'],
+            'Jharkhand': ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Bokaro', 'Deoghar', 'Hazaribagh', 'Giridih', 'Dumka', 'Palamu', 'Garhwa', 'Chatra', 'Koderma', 'Pakur', 'Sahebganj', 'Latehar'],
+            'Karnataka': ['Bangalore', 'Mysore', 'Hubli-Dharwad', 'Mangalore', 'Belgaum', 'Gulbarga', 'Davanagere', 'Bellary', 'Bijapur', 'Shimoga', 'Tumkur', 'Raichur', 'Bidar', 'Hassan', 'Mandya'],
+            'Kerala': ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam', 'Alappuzha', 'Palakkad', 'Malappuram', 'Kannur', 'Kasaragod', 'Pathanamthitta', 'Idukki', 'Wayanad'],
+            'Madhya Pradesh': ['Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain', 'Sagar', 'Dewas', 'Satna', 'Ratlam', 'Rewa', 'Murwara', 'Singrauli', 'Burhanpur', 'Khandwa', 'Chhindwara'],
+            'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik', 'Aurangabad', 'Solapur', 'Kolhapur', 'Amravati', 'Nanded', 'Sangli', 'Jalgaon', 'Akola', 'Latur', 'Dhule'],
+            'Manipur': ['Imphal', 'Thoubal', 'Bishnupur', 'Churachandpur', 'Ukhrul', 'Senapati', 'Tamenglong', 'Chandel', 'Jiribam', 'Kakching'],
+            'Meghalaya': ['Shillong', 'Tura', 'Jowai', 'Nongstoin', 'Williamnagar', 'Resubelpara', 'Baghmara', 'Nongpoh', 'Mairang', 'Ampati'],
+            'Mizoram': ['Aizawl', 'Lunglei', 'Saiha', 'Champhai', 'Kolasib', 'Serchhip', 'Mamit', 'Lawngtlai', 'Saitual', 'Khawzawl'],
+            'Nagaland': ['Kohima', 'Dimapur', 'Mokokchung', 'Tuensang', 'Wokha', 'Zunheboto', 'Phek', 'Mon', 'Longleng', 'Kiphire', 'Peren'],
+            'Odisha': ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Brahmapur', 'Sambalpur', 'Puri', 'Baleshwar', 'Bhadrak', 'Baripada', 'Balangir', 'Sundargarh', 'Kendujhar', 'Dhenkanal', 'Angul', 'Jagatsinghpur'],
+            'Punjab': ['Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala', 'Bathinda', 'Hoshiarpur', 'Moga', 'Firozpur', 'Sangrur', 'Gurdaspur', 'Rupnagar', 'Fatehgarh Sahib', 'Kapurthala', 'Tarn Taran', 'Barnala'],
+            'Rajasthan': ['Jaipur', 'Jodhpur', 'Kota', 'Bikaner', 'Ajmer', 'Udaipur', 'Bhilwara', 'Alwar', 'Sri Ganganagar', 'Sikar', 'Tonk', 'Sawai Madhopur', 'Nagaur', 'Pali', 'Barmer'],
+            'Sikkim': ['Gangtok', 'Namchi', 'Mangan', 'Gyalshing', 'Soreng', 'Pakyong', 'Ravongla', 'Jorethang', 'Rangpo', 'Singtam'],
+            'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruchirappalli', 'Vellore', 'Erode', 'Tiruppur', 'Dindigul', 'Thoothukkudi', 'Thanjavur', 'Villupuram', 'Kancheepuram', 'Cuddalore', 'Nagapattinam'],
+            'Telangana': ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar', 'Ramagundam', 'Khammam', 'Mahbubnagar', 'Nalgonda', 'Adilabad', 'Siddipet', 'Suryapet', 'Jagtial', 'Jangaon', 'Bhadradri Kothagudem', 'Mancherial'],
+            'Tripura': ['Agartala', 'Udaipur', 'Dharmanagar', 'Kailasahar', 'Belonia', 'Khowai', 'Teliamura', 'Ambassa', 'Sabroom', 'Kamalpur'],
+            'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Ghaziabad', 'Agra', 'Varanasi', 'Meerut', 'Allahabad', 'Bareilly', 'Aligarh', 'Moradabad', 'Saharanpur', 'Gorakhpur', 'Noida', 'Firozabad', 'Jhansi'],
+            'Uttarakhand': ['Dehradun', 'Haridwar', 'Roorkee', 'Haldwani', 'Rudrapur', 'Kashipur', 'Rishikesh', 'Kotdwara', 'Ramnagar', 'Pithoragarh'],
+            'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri', 'Bardhaman', 'Malda', 'Baharampur', 'Habra', 'Kharagpur', 'Shantipur', 'Dankuni', 'Dhulian', 'Ranaghat', 'Haldia'],
+            'Andaman and Nicobar Islands': ['Port Blair', 'Car Nicobar', 'Mayabunder', 'Diglipur', 'Rangat', 'Campbell Bay', 'Nancowry', 'Hut Bay'],
+            'Chandigarh': ['Chandigarh'],
+            'Dadra and Nagar Haveli and Daman and Diu': ['Silvassa', 'Daman', 'Diu'],
+            'Delhi': ['New Delhi', 'North Delhi', 'South Delhi', 'East Delhi', 'West Delhi', 'Central Delhi', 'Shahdara', 'Dwarka', 'Rohini', 'Pitampura'],
+            'Jammu and Kashmir': ['Srinagar', 'Jammu', 'Anantnag', 'Baramulla', 'Pulwama', 'Kupwara', 'Budgam', 'Ganderbal', 'Bandipora', 'Shopian'],
+            'Ladakh': ['Leh', 'Kargil'],
+            'Lakshadweep': ['Kavaratti', 'Agatti', 'Amini', 'Andrott', 'Kadmat', 'Kalpeni', 'Minicoy'],
+            'Puducherry': ['Puducherry', 'Karaikal', 'Mahe', 'Yanam']
+        };
+        stateSelect.onchange = function() {
+            const state = this.value;
+            const districtSelect = document.getElementById('district');
+            if (districtSelect) {
+                districtSelect.innerHTML = '<option value="">All Districts</option>';
+                if (stateDistricts[state]) {
+                    stateDistricts[state].forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d; 
+                        opt.textContent = d;
+                        districtSelect.appendChild(opt);
+                    });
+                }
+            }
+        };
+    }
+    
+    // Sort functionality
+    var sortBy = document.getElementById('sortBy');
+    if (sortBy) {
+        sortBy.onchange = function() {
+            filterAndSortProperties();
+        };
+    }
+    
+    // Filter form
+    var filterForm = document.getElementById('filterForm');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            filterAndSortProperties();
+        });
+    }
+    
+    // Reset filter
+    var resetFilter = document.getElementById('resetFilter');
+    if (resetFilter) {
+        resetFilter.addEventListener('click', function() {
+            // Reset all form fields
+            var form = document.getElementById('filterForm');
+            if (form) {
+                form.reset();
+                // Reset district dropdown
+                var districtSelect = document.getElementById('district');
+                if (districtSelect) {
+                    districtSelect.innerHTML = '<option value="">Select state first</option>';
+                }
+            }
+            // Reset sort
+            if (sortBy) {
+                sortBy.value = '';
+            }
+            filterAndSortProperties();
+        });
+    }
+    
+    function filterAndSortProperties() {
+        var properties = document.querySelectorAll('.property');
+        var visibleProperties = [];
+        
+        // Get filter values
+        var propertyType = document.getElementById('propertyType') ? document.getElementById('propertyType').value.toLowerCase() : '';
+        var bankName = document.getElementById('bankName') ? document.getElementById('bankName').value.toLowerCase() : '';
+        var state = document.getElementById('state') ? document.getElementById('state').value.toLowerCase() : '';
+        var district = document.getElementById('district') ? document.getElementById('district').value.toLowerCase() : '';
+        var bathroom = document.getElementById('bathroom') ? document.getElementById('bathroom').value : '';
+        var areaMin = document.getElementById('areaMin') ? parseFloat(document.getElementById('areaMin').value) : null;
+        var areaMax = document.getElementById('areaMax') ? parseFloat(document.getElementById('areaMax').value) : null;
+        var priceMin = document.getElementById('priceMin') ? parseFloat(document.getElementById('priceMin').value) : null;
+        var priceMax = document.getElementById('priceMax') ? parseFloat(document.getElementById('priceMax').value) : null;
+        
+        // Get sort value
+        var sortValue = sortBy ? sortBy.value : '';
+        
+        properties.forEach(function(property) {
+            var text = property.innerText.toLowerCase();
+            var show = true;
+            
+            // Apply filters
+            if (propertyType && !text.includes(propertyType)) show = false;
+            if (bankName && !text.includes(bankName)) show = false;
+            if (state && !text.includes(state)) show = false;
+            if (district && !text.includes(district)) show = false;
+            
+            // Price filter
+            var priceText = property.querySelector('.property-price') ? property.querySelector('.property-price').innerText : '';
+            var price = parseIndianPrice(priceText);
+            if (priceMin && (!price || price < priceMin)) show = false;
+            if (priceMax && price && price > priceMax) show = false;
+            
+            // Area filter (if available in extra_data)
+            var areaText = '';
+            var areaElements = property.querySelectorAll('span');
+            areaElements.forEach(function(el) {
+                if (el.innerText.includes('Area:')) {
+                    areaText = el.innerText;
+                }
+            });
+            var area = parseFloat(areaText.replace(/[^\d.]/g, ''));
+            if (areaMin && (!area || area < areaMin)) show = false;
+            if (areaMax && area && area > areaMax) show = false;
+            
+            if (show) {
+                visibleProperties.push(property);
+                property.style.display = '';
+            } else {
+                property.style.display = 'none';
+            }
+        });
+        
+        // Apply sorting
+        if (sortValue && visibleProperties.length > 0) {
+            visibleProperties.sort(function(a, b) {
+                switch(sortValue) {
+                    case 'price_desc':
+                        var priceA = parseIndianPrice(a.querySelector('.property-price') ? a.querySelector('.property-price').innerText : '0');
+                        var priceB = parseIndianPrice(b.querySelector('.property-price') ? b.querySelector('.property-price').innerText : '0');
+                        return priceA - priceB;
+                    case 'price_asc':
+                        var priceA = parseIndianPrice(a.querySelector('.property-price') ? a.querySelector('.property-price').innerText : '0');
+                        var priceB = parseIndianPrice(b.querySelector('.property-price') ? b.querySelector('.property-price').innerText : '0');
+                        return priceB - priceA;
+                    case 'auction_date_asc':
+                        var dateA = parseAuctionDate(a.querySelector('.property-auction-date') ? a.querySelector('.property-auction-date').innerText : 'N/A');
+                        var dateB = parseAuctionDate(b.querySelector('.property-auction-date') ? b.querySelector('.property-auction-date').innerText : 'N/A');
+                        return dateA - dateB;
+                    case 'auction_date_desc':
+                        var dateA = parseAuctionDate(a.querySelector('.property-auction-date') ? a.querySelector('.property-auction-date').innerText : 'N/A');
+                        var dateB = parseAuctionDate(b.querySelector('.property-auction-date') ? b.querySelector('.property-auction-date').innerText : 'N/A');
+                        return dateB - dateA;
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Reorder DOM elements
+            var container = document.querySelector('.properties');
+            if (container) {
+                visibleProperties.forEach(function(property) {
+                    container.appendChild(property);
+                });
+            }
+        }
+        
+        // Update count display
+        var showingCount = document.getElementById('showingCount');
+        var totalCount = document.getElementById('totalCount');
+        if (showingCount && totalCount) {
+            showingCount.textContent = `1 - ${visibleProperties.length}`;
+            totalCount.textContent = visibleProperties.length;
+        }
+    }
+    
+    // Helper function to parse Indian price formats
+    function parseIndianPrice(priceText) {
+        if (!priceText) return 0;
+        priceText = priceText.toLowerCase().trim();
+        
+        // Remove ₹ symbol and spaces
+        priceText = priceText.replace(/₹/g, '').replace(/\s+/g, '');
+        
+        // Handle "Cr" (crore = 10000000)
+        if (priceText.includes('cr')) {
+            var num = parseFloat(priceText.replace('cr', ''));
+            return num * 10000000;
+        }
+        
+        // Handle "lac" (lakh = 100000)
+        if (priceText.includes('lac')) {
+            var num = parseFloat(priceText.replace('lac', ''));
+            return num * 100000;
+        }
+        
+        // Handle regular numbers
+        return parseFloat(priceText) || 0;
+    }
+
+    // Helper function to parse auction dates
+    function parseAuctionDate(dateText) {
+        if (!dateText || dateText === 'N/A') return new Date('9999-12-31'); // Put invalid dates at the end
+        
+        // Try different date formats
+        var date = null;
+        
+        // Try ISO format (YYYY-MM-DD)
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
+            date = new Date(dateText);
+        }
+        // Try DD/MM/YYYY format
+        else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateText)) {
+            var parts = dateText.split('/');
+            date = new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+        // Try DD-MM-YYYY format
+        else if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateText)) {
+            var parts = dateText.split('-');
+            date = new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+        // Try MM/DD/YYYY format
+        else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateText)) {
+            var parts = dateText.split('/');
+            date = new Date(parts[2], parts[0] - 1, parts[1]);
+        }
+        // Try MM-DD-YYYY format
+        else if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateText)) {
+            var parts = dateText.split('-');
+            date = new Date(parts[2], parts[0] - 1, parts[1]);
+        }
+        // Try any other format
+        else {
+            date = new Date(dateText);
+        }
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return new Date('9999-12-31'); // Put invalid dates at the end
+        }
+        
+        return date.getTime();
+    }
+    
+    // Initial load
+    filterAndSortProperties();
+    
+    // Toggle view favourites
+    let showingFavs = false;
+    var toggleFavBtn = document.getElementById('toggleFavBtn');
+    if (toggleFavBtn) {
+        toggleFavBtn.addEventListener('click', function() {
+            showingFavs = !showingFavs;
+            const favs = JSON.parse(localStorage.getItem('favourites') || '[]');
+            document.querySelectorAll('.property').forEach(function(card) {
+                const idEl = card.querySelector('[data-property-id]');
+                if (!idEl) return;
+                const id = parseInt(idEl.getAttribute('data-property-id'));
+                if (showingFavs) {
+                    if (!favs.includes(id)) {
+                        card.style.display = 'none';
+                    } else {
+                        card.style.display = '';
+                    }
+                } else {
+                    card.style.display = '';
+                }
+            });
+            this.textContent = showingFavs ? 'View All Properties' : 'View Favorites';
+            this.style.background = showingFavs ? '#e74c3c' : '#8a1832';
+        });
+    }
+});
+</script>
+<button onclick="testFav()" style="position:fixed;bottom:10px;right:10px;z-index:9999;">Test Fav</button>
+{% endblock %} 
